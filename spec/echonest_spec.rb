@@ -19,6 +19,11 @@ describe 'EchoNest' do
     it 'returns an array of songs' do
       expect(en.get_songs.first.class).to be(Song)
     end
+  end
 
+  describe '#songs_in_tempo_range' do
+    it 'returns an array of songs' do
+      expect(en.songs_in_tempo_range(1, 50, 100).first.class).to be(Song)
+    end
   end
 end

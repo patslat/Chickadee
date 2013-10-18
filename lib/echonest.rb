@@ -11,6 +11,14 @@ class EchoNest
     "http://developer.echonest.com/api/v4/"
   end
 
+  def songs_in_tempo_range(n, min, max)
+    get_songs({
+      :limit => n,
+      :min_tempo => min,
+      :max_tempo => max
+    })
+  end
+
   def get_songs(params = {})
     uri = URI.parse(base_uri + 'song/' + 'search')
     res = make_api_call(uri, params)
@@ -21,6 +29,7 @@ class EchoNest
       Song.new(song_datum)
     end
   end
+
 
 
   protected
@@ -47,5 +56,5 @@ class Song
   end
 end
 
-en = EchoNest.new(TOKEN)
-p en.get_songs
+#en = EchoNest.new(TOKEN)
+#p en.get_songs
