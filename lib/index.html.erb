@@ -3,10 +3,8 @@
 <head>
 </head>
 <body>
-  <% songs.each do |song| %>
-    <iframe src="https://embed.spotify.com/?uri=<%= song.spotify_id %>"
+    <iframe src="https://embed.spotify.com/?uri=<%= playlist.embed_string %>"
       width="300" height="380" frameborder="0" allowtransparency="true">
     </iframe>
-  <% end %>
 </body>
 </html>

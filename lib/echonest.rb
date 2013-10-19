@@ -42,8 +42,24 @@ class EchoNest
     {
       :api_key => @key,
       :bucket => ['id:spotify-WW', 'audio_summary', 'tracks'],
-      :artist => 'robert johnson'
+      :artist => ['lorde', 'green day', 'linkin park', 'weezer'].sample
     }
+  end
+end
+
+class Playlist
+  attr_reader :songs
+  def initialize(songs)
+    @songs = songs
+  end
+
+  def embed_string
+    "spotify:trackset:Chickadee:#{ concatenate_spotify_ids }"
+  end
+
+  protected
+  def concatenate_spotify_ids
+    @songs.map(&:spotify_id).join(',')
   end
 end
 
@@ -60,7 +76,7 @@ class Song
     songs.map do |song|
       song['artist_foreign_ids'] = song['artist_foreign_ids'].first
       song['track'] = song['tracks'].first
-      song['spotify_id'] = song['track']['foreign_id'].gsub('-WW', '')
+      song['spotify_id'] = song['track']['foreign_id'].gsub('spotify-WW:track:', '')
       Song.new(song)
     end
   end

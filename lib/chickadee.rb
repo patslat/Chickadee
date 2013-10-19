@@ -8,18 +8,19 @@ class Chickadee
 
   def get_playlist
     current_time = Time.now.to_i
-    [].tap do |playlist|
+    playlist_songs = []
+    playlist_songs.tap do |playlist|
       until current_time >= @target_time
         #build playlist and add length of song to current time
         song = @en.get_songs.sample
-        p song
         current_time += song.audio_summary['duration']#song.duration.to_i
-        playlist << song
+        playlist_songs << song
       end
     end
+    Playlist.new(playlist_songs)
   end
 
-  def build_template(songs)
+  def build_template(playlist)
     f = File.new('playlist.html', 'w')
     f << ERB.new(File.read('./lib/index.html.erb')).result(binding)
     f.close
