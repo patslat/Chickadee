@@ -4,8 +4,7 @@
 </head>
 <body>
   <% songs.each do |song| %>
-  <%= song %>
-    <iframe src="https://embed.spotify.com/?uri=<%= song.id %>"
+    <iframe src="https://embed.spotify.com/?uri=<%= song.spotify_id %>"
       width="300" height="380" frameborder="0" allowtransparency="true">
     </iframe>
   <% end %>

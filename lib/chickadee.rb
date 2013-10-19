@@ -13,7 +13,7 @@ class Chickadee
         #build playlist and add length of song to current time
         song = @en.get_songs.sample
         p song
-        current_time += 1200#song.duration.to_i
+        current_time += song.audio_summary['duration']#song.duration.to_i
         playlist << song
       end
     end

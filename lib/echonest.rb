@@ -42,13 +42,13 @@ class EchoNest
     {
       :api_key => @key,
       :bucket => ['id:spotify-WW', 'audio_summary', 'tracks'],
-      :artist => 'radiohead'
+      :artist => 'robert johnson'
     }
   end
 end
 
 class Song
-  attr_reader :artist_id, :id, :artist_name, :title
+  attr_reader :artist_id, :id, :artist_name, :title, :spotify_id, :track, :audio_summary
   def initialize(params)
     params.each do |key, value|
       instance_variable_set("@#{key}", value)
@@ -57,16 +57,11 @@ class Song
 
   def self.parse_available(songs)
     songs.select! { |song| song['tracks'].first }
-    p songs
     songs.map do |song|
       song['artist_foreign_ids'] = song['artist_foreign_ids'].first
-      song['tracks'] = song['tracks'].first
-      song['track_id'] = song['tracks']['foreign_id'].gsub('-WW', '')
+      song['track'] = song['tracks'].first
+      song['spotify_id'] = song['track']['foreign_id'].gsub('-WW', '')
       Song.new(song)
     end
   end
 end
-
-
-en = EchoNest.new(TOKEN)
-p en.get_songs
