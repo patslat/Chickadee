@@ -1,9 +1,18 @@
-require './lib/echonest'
 require 'erb'
 
 class Chickadee
   def initialize(target_time, en)
     @target_time, @en = target_time.to_i, en
+  end
+
+  def time_ratio
+  end
+
+  def tempo
+  end
+
+  def mood
+
   end
 
   def get_playlist
@@ -12,7 +21,9 @@ class Chickadee
     playlist_songs.tap do |playlist|
       until current_time >= @target_time
         #build playlist and add length of song to current time
-        song = @en.get_songs.sample
+        songs = @en.get_songs
+        next if songs.empty?
+        song = songs.sample
         current_time += song.audio_summary['duration']#song.duration.to_i
         playlist_songs << song
       end
@@ -27,9 +38,3 @@ class Chickadee
     return f
   end
 end
-
-en = EchoNest.new(TOKEN)
-chickadee = Chickadee.new(Time.now + 3600, en)
-
-playlist = chickadee.get_playlist
-chickadee.build_template(playlist)

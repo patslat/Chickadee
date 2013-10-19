@@ -28,8 +28,6 @@ class EchoNest
     Song.parse_available(song_data)
   end
 
-
-
   protected
 
   def make_api_call(uri, params = {})
@@ -42,42 +40,9 @@ class EchoNest
     {
       :api_key => @key,
       :bucket => ['id:spotify-WW', 'audio_summary', 'tracks'],
-      :artist => ['lorde', 'green day', 'linkin park', 'weezer'].sample
+      :max_duration => '360',
+      :song_type => ['studio:true', 'live:false'],
+      :style => ['-country', 'indie']
     }
-  end
-end
-
-class Playlist
-  attr_reader :songs
-  def initialize(songs)
-    @songs = songs
-  end
-
-  def embed_string
-    "spotify:trackset:Chickadee:#{ concatenate_spotify_ids }"
-  end
-
-  protected
-  def concatenate_spotify_ids
-    @songs.map(&:spotify_id).join(',')
-  end
-end
-
-class Song
-  attr_reader :artist_id, :id, :artist_name, :title, :spotify_id, :track, :audio_summary
-  def initialize(params)
-    params.each do |key, value|
-      instance_variable_set("@#{key}", value)
-    end
-  end
-
-  def self.parse_available(songs)
-    songs.select! { |song| song['tracks'].first }
-    songs.map do |song|
-      song['artist_foreign_ids'] = song['artist_foreign_ids'].first
-      song['track'] = song['tracks'].first
-      song['spotify_id'] = song['track']['foreign_id'].gsub('spotify-WW:track:', '')
-      Song.new(song)
-    end
   end
 end
