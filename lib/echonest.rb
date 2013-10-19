@@ -25,9 +25,7 @@ class EchoNest
 
     return res.value unless res.is_a? Net::HTTPSuccess
     song_data = JSON.parse(res.body)['response']['songs']
-    song_data.map do |song_datum|
-      Song.new(song_datum)
-    end
+    Song.parse_available(song_data)
   end
 
 
@@ -42,7 +40,9 @@ class EchoNest
 
   def default_params
     {
-      :api_key => @key
+      :api_key => @key,
+      :bucket => ['id:spotify-WW', 'audio_summary', 'tracks'],
+      :artist => 'radiohead'
     }
   end
 end
@@ -54,7 +54,19 @@ class Song
       instance_variable_set("@#{key}", value)
     end
   end
+
+  def self.parse_available(songs)
+    songs.select! { |song| song['tracks'].first }
+    p songs
+    songs.map do |song|
+      song['artist_foreign_ids'] = song['artist_foreign_ids'].first
+      song['tracks'] = song['tracks'].first
+      song['track_id'] = song['tracks']['foreign_id'].gsub('-WW', '')
+      Song.new(song)
+    end
+  end
 end
 
-#en = EchoNest.new(TOKEN)
-#p en.get_songs
+
+en = EchoNest.new(TOKEN)
+p en.get_songs

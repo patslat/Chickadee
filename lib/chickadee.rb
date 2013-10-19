@@ -1,4 +1,5 @@
-require 'echonest'
+require './lib/echonest'
+require 'erb'
 
 class Chickadee
   def initialize(target_time, en)
@@ -11,9 +12,23 @@ class Chickadee
       until current_time >= @target_time
         #build playlist and add length of song to current time
         song = @en.get_songs.sample
-        current_time += song.length.to_i
+        p song
+        current_time += 1200#song.duration.to_i
         playlist << song
       end
     end
   end
+
+  def build_template(songs)
+    f = File.new('playlist.html', 'w')
+    f << ERB.new(File.read('./lib/index.html.erb')).result(binding)
+    f.close
+    return f
+  end
 end
+
+en = EchoNest.new(TOKEN)
+chickadee = Chickadee.new(Time.now + 3600, en)
+
+playlist = chickadee.get_playlist
+chickadee.build_template(playlist)
