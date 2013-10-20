@@ -11,11 +11,12 @@ class EchoNest
     "http://developer.echonest.com/api/v4/"
   end
 
-  def songs_in_tempo_range(n, min, max)
+  def songs_in_tempo_range(min, max)
+    p min
+    p max
     get_songs({
-      :limit => n,
-      :min_tempo => min,
-      :max_tempo => max
+      :min_tempo => "#{min}",
+      :max_tempo => "#{max}"
     })
   end
 
