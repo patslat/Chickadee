@@ -19,3 +19,11 @@ get '/tempo' do
   playlist = chickadee.tempo_playlist
   erb :index, :locals => { :playlist => playlist }
 end
+
+get '/lively' do
+  en = EchoNest.new(TOKEN)
+  chickadee = Chickadee.new(Time.now + 600, en)
+
+  playlist = chickadee.lively_playlist
+  erb :index, :locals => { :playlist => playlist }
+end
