@@ -10,13 +10,14 @@ class Chickadee
     playlist_songs = []
     playlist_songs.tap do |playlist|
       until @current_time >= @stop
+        p weight
         songs = @en.get_songs({
           :min_tempo => weighted_tempo,
           :max_tempo => weighted_tempo + 20,
-          :min_energy => weight,
-          :max_energy => weight + 0.1,
-          :min_danceability => weight,
-          :max_danceability => weight + 0.1
+          :min_energy => weight - 0.1,
+          :max_energy => max_weight,
+          :min_danceability => weight - 0.1,
+          :max_danceability => max_weight
         })
         next if songs.empty?
         song = songs.sample
@@ -73,6 +74,12 @@ class Chickadee
   def weight
     weight = @current_time / @stop
     weight > 0.4 ? weight : 0.4
+  end
+
+  def max_weight
+    w = weight + 0.1
+    w unless w > 1.0
+    1.0
   end
 
   def weighted_tempo
